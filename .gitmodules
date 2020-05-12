@@ -1,0 +1,3 @@
+[submodule "StoreManagementUI"]
+	path = StoreManagementUI
+	url = https://github.com/NilamaniBhanja/StoreManagement.git

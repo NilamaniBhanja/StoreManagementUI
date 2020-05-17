@@ -1,0 +1,126 @@
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+      <main>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-5">
+              <div class="card shadow-lg border-0 rounded-lg mt-5">
+                <!-- <div class="card-header">
+                  <h3 class="text-center font-weight-light my-4">Login</h3>
+                </div> -->
+                <div class="card-body">
+                  <div class="card-body">
+                    <form #fRegister="ngForm" (ngSubmit)="onSubmit(fRegister)">
+                        <h1>Register</h1>
+                        <p class="text-muted">Create your account</p>
+
+                        <div class="form-group">
+                          <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="icon-user"></i></span>
+                            </div>
+                            <input id="userName" name="username" class="form-control" ngModel #username="ngModel"
+                                    required minlength="6" autofocus="autofocus"
+                                    placeholder="Username" autocomplete="username" />  
+                          </div>
+                          <span class="help-block"
+                              *ngIf="!username.valid && username.touched  && username.errors?.required">
+                              Please enter User Name.
+                          </span>
+                          <span class="help-block" *ngIf="!username.valid && username.errors?.minlength">
+                              User name should contain atleast 6 characters.
+                          </span>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">@</span>
+                          </div>
+                          <input type="email" id="email" name="email" class="form-control" ngModel #email="ngModel"
+                          placeholder="Email" autocomplete="Email" 
+                                required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"/>
+                          
+                        </div>
+                        <span class="help-block" *ngIf="!email.valid && email.touched && email.errors?.required">
+                          Please enter Email.
+                      </span>
+                      <span class="help-block" *ngIf="!email.valid && email.errors?.pattern">
+                          Please enter valid Email address.
+                      </span>
+                    </div>
+
+                    <div class="form-group">
+                      <div class="input-group mb-3">
+
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">
+                            <i class="icon-screen-smartphone"></i>                                
+                          </span>
+                        </div>
+                        <input id="phonenumber" name="phonenumber" class="form-control" ngModel
+                        #phonenumber="ngModel" required 
+                        placeholder="Mobile Number" autocomplete="Mobile Number"  pattern="^[6-9]\d{9}$" maxlength="10" />
+                      </div>
+                      <span class="help-block"
+                            *ngIf="!phonenumber.valid && phonenumber.touched && phonenumber.errors?.required">
+                            Please enter phone number.
+                        </span>
+                        <span class="help-block"
+                            *ngIf="!phonenumber.valid  && phonenumber.errors?.pattern">
+                            Please enter minimum 10 digits of number or valid number.
+                        </span>
+                      
+                  </div>
+
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-lock"></i></span>
+                      </div>
+                      <input id="password" name="password" class="form-control" ngModel #password="ngModel"
+                      required placeholder="Password" autocomplete="new-password" 
+                      pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$"
+                      type="password" />
+
+                    </div>
+                    <span class="help-block"
+                            *ngIf="!password.valid && password.touched  && password.errors?.required">
+                            Please enter Password.
+                        </span>
+                        <span class="help-block" *ngIf="!password.valid && password.errors?.pattern">
+                            A minimum 8 characters password contains a combination of <strong>uppercase and lowercase
+                                letter</strong> and <strong>number</strong> and <strong>spcial character </strong>.
+                        </span>
+                    
+                </div>
+                <!-- <div class="form-group">
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                  </div>
+              </div> -->
+              <button type="button" class="btn btn-danger"> Cancel </button>
+              <button class="btn btn-success pull-right" [disabled]="!fRegister.valid" type="submit">
+                Register
+            </button>
+                        
+
+                      </form>
+                  </div>
+                </div>
+                <div class="card-footer text-center">
+                  <div class="small"><a href="">Have an account? Go to login</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  
+    <app-footer></app-footer>
+  
+  </div>
+  

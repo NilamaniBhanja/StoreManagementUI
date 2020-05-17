@@ -1,0 +1,63 @@
+<div id="layoutAuthentication">
+  <div id="layoutAuthentication_content">
+    <main>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5">
+            <div class="card shadow-lg border-0 rounded-lg mt-5">
+              <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+                <div ngModelGroup="user" class="card-body">
+                  <h1>Login</h1>
+                  <p class="text-muted">Sign In to your account</p>
+                  <div class="form-group">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="icon-user"></i></span>
+                      </div>
+                      <input type="text" id="userName" name="username" ngModel #username="ngModel" minlength="6"
+                        autofocus="autofocus" required class="form-control" placeholder="Username"
+                        autocomplete="username">
+                    </div>
+                    <span class="help-block" *ngIf="!username.valid && username.touched && username.errors?.required">
+                      Please enter User Name.
+                    </span>
+                    <span class="help-block" *ngIf="!username.valid && username.errors?.minlength">
+                      User name should contain atleast 6 characters.
+                    </span>
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group mb-4">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-lock"></i></span>
+                      </div>
+                      <input type="password" id="password" name="password" ngModel #password="ngModel" required
+                        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}$"
+                        class="form-control" placeholder="Password" autocomplete="current-password">
+                    </div>
+                    <span class="help-block" *ngIf="!password.valid && password.touched  && password.errors?.required">
+                      Please enter Password.
+                    </span>
+                    <span class="help-block" *ngIf="!password.valid && password.errors?.pattern">
+                      A minimum 8 characters password contains a combination of <strong>uppercase and lowercase
+                        letter</strong> and <strong>number</strong> and <strong>spcial character </strong>.
+                    </span>
+                  </div>
+                  <button type="button" class="btn btn-link">Forgot password?</button>
+                  <button [disabled]="!loginForm.valid" type="submit" class="btn btn-success  pull-right">Login</button>
+                  
+                  
+                </div>
+              </form>
+              <div class="card-footer text-center">
+                <div class="small"><a href="">Need an account? Sign up!</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+
+</div>

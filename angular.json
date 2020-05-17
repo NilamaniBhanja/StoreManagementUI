@@ -42,9 +42,17 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.css",
+              "./node_modules/font-awesome/css/font-awesome.css",
+              "./node_modules/simple-line-icons/css/simple-line-icons.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.js",
+              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "./src/assets/JS/scripts.js"
+            ]
           },
           "configurations": {
             "production": {

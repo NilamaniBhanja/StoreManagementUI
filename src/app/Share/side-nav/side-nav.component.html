@@ -3,22 +3,76 @@
     <div class="sb-sidenav-menu">
       <div class="nav">
         <div class="sb-sidenav-menu-heading">Core</div>
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" routerLink="/Dashboard" routerLinkActive="active">
           <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
           Dashboard
         </a>
-        <div class="sb-sidenav-menu-heading">Interface</div>
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts"
-          aria-expanded="false" aria-controls="collapseLayouts">
-          <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-          Layouts
+
+        <div class="sb-sidenav-menu-heading">Store Manage</div>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct"
+          aria-expanded="false" aria-controls="collapseProduct">
+          <div class="sb-nav-link-icon"><i class="icon-grid"></i></div>
+          Product
           <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
         </a>
-        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-          <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" href="layout-static.html">Static
-              Navigation</a><a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a></nav>
+        <div class="collapse" id="collapseProduct" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="">Product Type</a>
+            <a class="nav-link" href="">Product</a>
+          </nav>
         </div>
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false"
+
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCustomer"
+          aria-expanded="false" aria-controls="collapseCustomer">
+          <div class="sb-nav-link-icon"><i class="icon-people"></i></div>
+          Customer
+          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseCustomer" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="">Customer Type</a>
+            <a class="nav-link" href="">Customer</a>
+            <a class="nav-link" href="">Customer Reports</a>
+          </nav>
+        </div>
+
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory"
+          aria-expanded="false" aria-controls="collapseInventory">
+          <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+          Inventory
+          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseInventory" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link" href="">Order</a>
+            <a class="nav-link" href="">Invoice</a>
+          </nav>
+        </div>
+
+        <!-- Master -->
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaster"
+        aria-expanded="false" aria-controls="collapseMaster">
+        <div class="sb-nav-link-icon"><i class="icon-layers"></i></div>
+        Master
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+      </a>
+      <div class="collapse" id="collapseMaster" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">          
+          <a class="nav-link" href="">Brand</a>
+          <a class="nav-link" href="">Measurement</a>             
+          <a class="nav-link" href="">Store</a>
+          <a class="nav-link" href="">Supplier</a>  
+          <a class="nav-link" href="">Transaction</a>  
+          <a class="nav-link" href="">Sell</a>    
+        </nav>
+      </div>
+      <div class="sb-sidenav-menu-heading">Configuration</div>
+        <a class="nav-link" href="">
+          <div class="sb-nav-link-icon"><i class="icon-settings"></i></div>
+          Service
+        </a>
+
+        <!-- <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false"
           aria-controls="collapsePages">
           <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
           Pages
@@ -44,20 +98,17 @@
                   class="nav-link" href="404.html">404 Page</a><a class="nav-link" href="500.html">500 Page</a></nav>
             </div>
           </nav>
-        </div>
-        <div class="sb-sidenav-menu-heading">Addons</div>
-        <a class="nav-link" href="charts.html">
-          <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-          Charts
-        </a><a class="nav-link" href="tables.html">
-          <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-          Tables
-        </a>
+        </div> -->
+       
+
       </div>
     </div>
+
+
+
     <div class="sb-sidenav-footer">
-      <div class="small">Logged in as:</div>
-      Start Bootstrap
+      <div class="small">SMS</div>
+      Store Management System
     </div>
   </nav>
 </div>

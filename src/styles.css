@@ -6058,10 +6058,10 @@ a.close.disabled {
   vertical-align: text-top !important;
 }
 
-.bg-primary {
+
+.bg-body {
   background-color: #e4e5e6 !important;
 }
-
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {

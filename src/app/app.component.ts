@@ -5,7 +5,7 @@ import {filter, map, mergeMap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>'
+  templateUrl: './app.component.html'
 
 })
 export class AppComponent implements OnInit {

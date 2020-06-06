@@ -1,3 +1,4 @@
+import { AuthGuard } from './Security/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -14,6 +15,11 @@ import { UnauthorizedErrorComponent } from './Share/unauthorized-error/unauthori
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpErrorInterceptor } from './Security/http-error.interceptor';
+import { TopNavComponent } from './Share/top-nav/top-nav.component';
+import { SideNavComponent } from './Share/side-nav/side-nav.component';
+import { DashboardComponent } from './Dashboard/dashboard.component';
+import { PublicComponent } from './layout/public/public.component';
+import { SecureComponent } from './layout/secure/secure.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +31,12 @@ import { HttpErrorInterceptor } from './Security/http-error.interceptor';
     ForgotPasswordComponent,
     NotFoundErrorComponent,
     ServerErrorComponent,
-    UnauthorizedErrorComponent
+    UnauthorizedErrorComponent,
+    TopNavComponent,
+    SideNavComponent,
+    DashboardComponent,
+    PublicComponent,
+    SecureComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +48,8 @@ import { HttpErrorInterceptor } from './Security/http-error.interceptor';
     {  provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,
       multi: true
-   }
+   },
+   AuthGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,4 @@
+import { AuthGuard } from './Security/auth.guard';
 import { UnauthorizedErrorComponent } from './Share/unauthorized-error/unauthorized-error.component';
 import { ServerErrorComponent } from './Share/server-error/server-error.component';
 import { NotFoundErrorComponent } from './Share/not-found-error/not-found-error.component';
@@ -7,6 +8,8 @@ import { RegisterComponent } from './Account/register/register.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './Account/login/login.component';
+import { SecureComponent } from './layout/secure/secure.component';
+import { SECURE_ROUTES } from './Layout/secure/secure.routes';
 
 
 const routes: Routes = [  
@@ -16,12 +19,15 @@ const routes: Routes = [
   { path: 'Register', component: RegisterComponent, data: { title: 'User Register' }},
   { path: 'ChangePassword', component: ChangePasswordComponent, data: { title: 'Change Password' }},
   { path: 'ForgotPassword', component: ForgotPasswordComponent, data: { title: 'Forgot Password' }},
-  
-
   //Error
   { path: 'FileNotFound', component: NotFoundErrorComponent, data: { title: 'File Not Found' }},
   { path: 'InternalServerError', component: ServerErrorComponent, data: { title: 'Internal Server Error' }},
   { path: 'UnauthorizedError', component: UnauthorizedErrorComponent, data: { title: 'Unauthorized Error' }},
+  
+  //Dashboard Panel
+  { path: '', component: SecureComponent, canActivate: [AuthGuard], children: SECURE_ROUTES },
+
+  
   { path: '', redirectTo: 'Login', pathMatch: 'full', },
   { path: '**', component: LoginComponent }
   //{ path: '**', component: NotFoundErrorComponent }

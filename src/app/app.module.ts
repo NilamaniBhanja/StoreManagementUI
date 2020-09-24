@@ -20,6 +20,7 @@ import { SideNavComponent } from './Share/side-nav/side-nav.component';
 import { DashboardComponent } from './Dashboard/dashboard.component';
 import { PublicComponent } from './layout/public/public.component';
 import { SecureComponent } from './layout/secure/secure.component';
+import { BrandComponent } from './Master/brand/brand.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SecureComponent } from './layout/secure/secure.component';
     SideNavComponent,
     DashboardComponent,
     PublicComponent,
-    SecureComponent
+    SecureComponent,
+    BrandComponent
   ],
   imports: [
     BrowserModule,

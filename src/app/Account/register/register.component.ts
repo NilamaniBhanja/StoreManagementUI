@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AccountRegister } from 'src/app/Models/Account.Model';
+import { AccountRegister } from 'src/app/Model/Account.Model';
 import { NgForm } from '@angular/forms';
 import { AccountService } from 'src/app/Security/account.service';
 

@@ -50,7 +50,8 @@
             "scripts": [
               "./node_modules/jquery/dist/jquery.js",
               "./node_modules/bootstrap/dist/js/bootstrap.js",
-              "./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+              "./src/assets/JS/jquery.dataTables.min.js",
+              "./src/assets/JS/dataTables.bootstrap4.min.js"
             ]
           },
           "configurations": {

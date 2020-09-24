@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Brand } from '../Models/Master.Model';
+import { Brand } from '../Model/Master.Model';
+import { ResDataModal } from '../Model/resDataModal';
 
-const API_URL = "/api/Brand/";
+const API_URL = "http://localhost:5000/api/Brand/";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'
@@ -18,8 +19,10 @@ export class BrandServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getBrand(filter): Observable<Brand[]> {
-    return this.http.get<Brand[]>(API_URL + '?' + this.toQueryString(filter), httpOptions);
+  getBrand(): Observable<Brand[]> {
+    console.log(API_URL);
+    console.log(this.http.get<Brand[]>(API_URL, httpOptions));
+    return this.http.get<Brand[]>(API_URL, httpOptions);
   }
 
   toQueryString(obj) {

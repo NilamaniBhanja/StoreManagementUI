@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ChangePassword } from 'src/app/Models/Account.Model';
+import { ChangePassword } from 'src/app/Model/Account.Model';
 import { AccountService } from 'src/app/Security/account.service';
 
 @Component({

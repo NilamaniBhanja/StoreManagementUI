@@ -11,9 +11,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private loadScriptService: LoadScriptService) { }
 
-  ngOnInit(): void {
-    this.loadScriptService.loadScript('https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js');
-    this.loadScriptService.loadScript('https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js');
+  ngOnInit(): void {    
     this.loadScriptService.loadScript('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js');
     this.loadScriptService.loadScript('assets/JS/scripts.js');
     this.loadScriptService.loadScript('assets/demo/chart-area-demo.js');

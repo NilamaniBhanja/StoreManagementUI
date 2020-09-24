@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { UserAuth, AccountLogin, AccountRegister, ChangePassword } from '../Models/Account.Model';
+import { UserAuth, AccountLogin, AccountRegister, ChangePassword } from '../Model/Account.Model';
 
 const API_URL = "http://localhost:5000/api/Account/";
 

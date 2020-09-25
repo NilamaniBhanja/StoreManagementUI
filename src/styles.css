@@ -10220,3 +10220,6 @@ select.ng-invalid.ng-touched{
 .help-block{
   color: red;
 }
+
+.modal{background: rgba(0,0,0, .5);}
+.modal { overflow-y: auto !important; }

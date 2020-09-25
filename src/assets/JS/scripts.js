@@ -2,6 +2,9 @@
   "use strict";
   $(document).ready(function () {
     document.getElementById("copyyear").innerHTML = new Date().getFullYear();
+
+    
+
   });
 
 
@@ -18,4 +21,6 @@
     e.preventDefault();
     $("body").toggleClass("sb-sidenav-toggled");
   });
+
 })(jQuery);
+

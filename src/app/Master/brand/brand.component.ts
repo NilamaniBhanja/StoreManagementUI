@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { AppSettings } from 'src/app/AppSettings';
 import { Brand } from 'src/app/Model/Master.Model';
 import { BrandServiceService } from 'src/app/Service/brand-service.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-brand',
@@ -10,6 +14,9 @@ import { BrandServiceService } from 'src/app/Service/brand-service.service';
   styles: [
   ]
 })
+
+
+
 export class BrandComponent implements OnInit {
 
   brand: Brand;
@@ -21,6 +28,11 @@ export class BrandComponent implements OnInit {
   dt$: any[] = [];
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement: DataTableDirective;
+
+ 
+  
 
   constructor(private brandServiceService: BrandServiceService) { }
 
@@ -28,9 +40,10 @@ export class BrandComponent implements OnInit {
     this.getDataUI();
   }
   getDataUI() {
+
     this.dtOptions = {
-      destroy: true,
       retrieve: true,
+      destroy: true,
       pagingType: 'simple_numbers',
       pageLength: 10,
       processing: true,
@@ -44,13 +57,24 @@ export class BrandComponent implements OnInit {
     };
 
     this.brandServiceService.getData().subscribe(data => {
-      this.dt$ = data;
       this.dtTrigger.next();
+      this.dt$ = data;
     }, err => { console.log(err); });
   }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+  reDraw(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.clear().draw();
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
   }
 
   // Add, Edit and View of Brand
@@ -75,7 +99,6 @@ export class BrandComponent implements OnInit {
       this.getDataById(id);
     }
     this.openModalDialog();
-    
   }
 
   async getDataById(id: number) {
@@ -85,7 +108,6 @@ export class BrandComponent implements OnInit {
       );
   }
 
-
   onSubmit(form: NgForm) {
     if (this.submitText === 'Update') {
       this.updateBrand(this.brand);
@@ -93,11 +115,43 @@ export class BrandComponent implements OnInit {
       this.addBrand(this.brand);
     }
   }
+  onDelete(id: number) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.brandServiceService.deleteData(id).subscribe(data => {
+          console.log(data);
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+          this.reDraw();
+          this.getDataUI();
+        }, err => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!'
+          })
+        });
+      }
+    })
+  }
 
   updateBrand(brand: Brand) {
     this.brandServiceService.updateData(brand).subscribe(data => {
       console.log(data);
       this.closeModalDialog();
+      this.reDraw();
       this.getDataUI();
     }, err => { console.log(err); });
   }
@@ -107,8 +161,13 @@ export class BrandComponent implements OnInit {
       .subscribe(
         resp => {
           if (resp != null) {
-            console.log("successfully created");
             this.closeModalDialog();
+            AppSettings.Toast.fire({
+              icon: 'success',
+              background:'#28a745',
+              title: 'Data successfully created'
+            })
+            this.reDraw();
             this.getDataUI();
           } else {
             console.log(resp);

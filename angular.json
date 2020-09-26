@@ -45,6 +45,7 @@
               "./node_modules/bootstrap/dist/css/bootstrap.css",
               "./node_modules/font-awesome/css/font-awesome.css",
               "./node_modules/simple-line-icons/css/simple-line-icons.css",
+              "./node_modules/sweetalert2/src/sweetalert2.scss",
               "src/styles.css"
             ],
             "scripts": [
@@ -52,6 +53,7 @@
               "./node_modules/bootstrap/dist/js/bootstrap.js",
               "./src/assets/JS/jquery.dataTables.min.js",
               "./src/assets/JS/dataTables.bootstrap4.min.js",
+              "./node_modules/sweetalert2/dist/sweetalert2.js",
               "./src/assets/JS/scripts.js"
             ]
           },

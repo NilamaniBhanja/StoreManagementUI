@@ -2,6 +2,7 @@ import { AuthGuard } from './Security/auth.guard';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,7 +47,8 @@ import { BrandComponent } from './Master/brand/brand.component';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    DataTablesModule
+    DataTablesModule,
+    SweetAlert2Module
   ],
   providers: [
     {  provide: HTTP_INTERCEPTORS,

@@ -1,10 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AppSettings } from '../AppSettings';
 import { Brand } from '../Model/Master.Model';
 import { ResDataModal } from '../Model/resDataModal';
 
-const API_URL = "http://localhost:5000/api/Brand/";
+const API_URL = AppSettings.API_ENDPOINT+"Brand/";
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json'

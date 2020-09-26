@@ -40,7 +40,8 @@
               <a (click)="openModel(dt.id,'View')" class="btn btn-info text-white" style="cursor:pointer">
                 <i class="fas fa-eye"></i>
               </a> |
-              <a class="btn btn-danger text-white" style="cursor:pointer">
+              <a class="btn btn-danger text-white" style="cursor:pointer" (click)="onDelete(dt.id)"
+              >
                 <i class="fas fa-trash-alt"></i>
                 </a>
             </td>
@@ -79,10 +80,10 @@
               <input type="text" id="brandQuality" name="brandQuality" class="form-control"
               [readonly]="fieldReadonly"  [(ngModel)]="brand.brandQuality">
             </div>
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+          
           </div>
 
-          <div class="modal-footer">
+          <div *ngIf="submitText" class="modal-footer">
             <button type="submit" class="btn btn-primary">{{submitText}}</button>
             <button type="button" class="btn btn-danger" (click)="closeModalDialog()">Close</button>
           </div>

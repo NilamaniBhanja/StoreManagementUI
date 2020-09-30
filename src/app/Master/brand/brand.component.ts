@@ -185,7 +185,11 @@ export class BrandComponent implements OnInit {
           }
         }
       } else {
-        this.errors.push("Something went wrong in Server!");
+        AppSettings.Toast.fire({
+          icon: 'error',
+          background: '#bf443d',
+          title: 'Something went wrong in Server!'
+        });
       }
 
     });

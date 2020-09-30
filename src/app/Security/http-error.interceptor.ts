@@ -23,18 +23,17 @@ import {
       }
       return next.handle(request)
         .pipe(
-          retry(1),
+          //retry(1),
           catchError((error: HttpErrorResponse) => {
-            let errorMessage = '';
-            if (error.error instanceof ErrorEvent) {
-              // client-side error
-              errorMessage = `Error: ${error.error.message}`;
-            } else {
-              // server-side error
-              errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-            }
-           // window.alert(errorMessage);
-            return throwError(errorMessage);
+            // let errorMessage = '';
+            // if (error.error instanceof ErrorEvent) {
+            //   // client-side error
+            //   errorMessage = `error: ${error.error}`;
+            // } else {
+            //   // server-side error
+            //   errorMessage = `status: ${error.status}\nmessage: ${error.message}\nerror: ${JSON.stringify(error.error)}`;
+            // }            
+            return throwError(error);
           })
         )
     }

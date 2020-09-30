@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { AppSettings } from 'src/app/AppSettings';
 import { Brand } from 'src/app/Model/Master.Model';
 import { BrandServiceService } from 'src/app/Service/brand-service.service';
+import { ToastrService } from 'src/app/Service/toastr.service';
 import Swal from 'sweetalert2';
 
 
@@ -24,6 +25,10 @@ export class BrandComponent implements OnInit {
   fieldReadonly = true;
   submitText = 'Create';
   modelHeader = '';
+  errors = [];
+
+  @ViewChild(NgForm, { static: false })
+  formElement: NgForm;
 
   dt$: any[] = [];
   dtOptions: DataTables.Settings = {};
@@ -31,12 +36,13 @@ export class BrandComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
- 
-  
 
-  constructor(private brandServiceService: BrandServiceService) { }
+
+
+  constructor(private brandServiceService: BrandServiceService, private toastr: ToastrService,) { }
 
   ngOnInit(): void {
+    // this.toastr.Warning('You successfully updated your product.', 'Product Name : ');
     this.getDataUI();
   }
   getDataUI() {
@@ -80,6 +86,8 @@ export class BrandComponent implements OnInit {
   // Add, Edit and View of Brand
   openModel(id: number, type: string) {
     console.log(this.submitText, id, type);
+    this.formElement.reset();
+    this.errors = [];
     if (id == 0 && type == "Add") {
       this.submitText = 'Create';
       this.fieldReadonly = false;
@@ -108,7 +116,7 @@ export class BrandComponent implements OnInit {
       );
   }
 
-  onSubmit(form: NgForm) {
+  onSubmit() {
     if (this.submitText === 'Update') {
       this.updateBrand(this.brand);
     } else {
@@ -129,18 +137,18 @@ export class BrandComponent implements OnInit {
 
         this.brandServiceService.deleteData(id).subscribe(data => {
           console.log(data);
-          Swal.fire(
-            'Deleted!',
-            'Your file has been deleted.',
-            'success'
-          )
+          AppSettings.Toast.fire({
+            icon: 'success',
+            background: '#51A351',
+            title: 'Your file has been deleted.'
+          })
           this.reDraw();
           this.getDataUI();
         }, err => {
-          Swal.fire({
+          AppSettings.Toast.fire({
             icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!'
+            background: '#bf443d',
+            title: 'Something went wrong!'
           })
         });
       }
@@ -150,31 +158,86 @@ export class BrandComponent implements OnInit {
   updateBrand(brand: Brand) {
     this.brandServiceService.updateData(brand).subscribe(data => {
       console.log(data);
+      // this.toastr.success('Data updated successfully.');
+      AppSettings.Toast.fire({
+        icon: 'success',
+        background: '#51A351',
+        title: 'Data updated successfully.'
+      })
+
       this.closeModalDialog();
       this.reDraw();
       this.getDataUI();
-    }, err => { console.log(err); });
+    }, err => {
+      console.log(err);
+      this.errors = [];
+      if (err.status == 400) {
+        let validationErrorDictionary = err.error;
+        for (var fieldName in validationErrorDictionary) {
+          if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+            if (this.formElement.controls[fieldName]) {
+              this.formElement.controls[fieldName].setErrors({ errorMessage: validationErrorDictionary[fieldName], incorrect: true });
+              this.formElement.controls[fieldName].markAsTouched();
+              this.formElement.controls[fieldName].markAsDirty();
+            } else {
+              this.errors.push(validationErrorDictionary[fieldName]);
+            }
+          }
+        }
+      } else {
+        this.errors.push("Something went wrong in Server!");
+      }
+
+    });
   }
+
+
 
   addBrand(brand: Brand) {
     this.brandServiceService.addData(brand)
       .subscribe(
         resp => {
           if (resp != null) {
+            this.errors = [];
             this.closeModalDialog();
             AppSettings.Toast.fire({
               icon: 'success',
-              background:'#28a745',
-              title: 'Data successfully created'
+              background: '#51A351',
+              title: 'Data created successfully'
             })
             this.reDraw();
             this.getDataUI();
           } else {
-            console.log(resp);
+            AppSettings.Toast.fire({
+              icon: 'warning',
+              background: '#d68511',
+              title: 'Something went wrong! Please try again'
+            });
           }
         },
         (err: any) => {
-          console.log("Error" + err);
+          this.errors = [];
+          if (err.status == 400) {
+            let validationErrorDictionary = err.error;
+            for (var fieldName in validationErrorDictionary) {
+              if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+                if (this.formElement.controls[fieldName]) {
+                  this.formElement.controls[fieldName].setErrors({ errorMessage: validationErrorDictionary[fieldName], incorrect: true });
+                  this.formElement.controls[fieldName].markAsTouched();
+                  this.formElement.controls[fieldName].markAsDirty();
+                } else {
+                  this.errors.push(validationErrorDictionary[fieldName]);
+                }
+              }
+            }
+          } else {
+
+            AppSettings.Toast.fire({
+              icon: 'error',
+              background: '#bf443d',
+              title: 'Something went wrong in Server!'
+            });
+          }
         }
       );
   }

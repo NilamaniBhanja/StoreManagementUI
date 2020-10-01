@@ -5,7 +5,7 @@ import { AppSettings } from '../AppSettings';
 @Injectable({
   providedIn: 'root'
 })
-export class ToastrService {
+export class ToasterService {
 
   titlemessage:string;
   constructor() { }
@@ -63,6 +63,8 @@ export class ToastrService {
   }
   Update(titlemessage?: string) {
     this.titlemessage = 'Data updated successfully';
+    if(titlemessage!=null)
+      this.titlemessage = titlemessage;
     AppSettings.Toast.fire({
       icon: 'success',
       background: '#51A351',
@@ -71,6 +73,9 @@ export class ToastrService {
   }
   Detele(titlemessage?: string) {
     this.titlemessage = 'Data deleted successfully';
+    if(titlemessage!=null)
+      this.titlemessage = titlemessage;
+      
     AppSettings.Toast.fire({
       icon: 'success',
       background: '#51A351',

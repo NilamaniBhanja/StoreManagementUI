@@ -42,7 +42,7 @@ export class BrandService {
   }
 
   updateData(brand: Brand) {
-    return this.http.put(API_URL + brand.id.toString(), brand, httpOptions);
+    return this.http.put(API_URL, brand, httpOptions);
   }
 
   deleteData(id: number) {

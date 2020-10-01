@@ -1,3 +1,4 @@
+import { ToasterService } from 'src/app/Service/toaster.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
@@ -6,8 +7,6 @@ import Swal from 'sweetalert2';
 
 import { Brand } from 'src/app/Model/Master.Model';
 import { BrandService } from 'src/app/Service/brand.service';
-import { ToastrService } from 'src/app/Service/toastr.service';
-
 
 @Component({
   selector: 'app-brand',
@@ -33,7 +32,7 @@ export class BrandComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
-  constructor(private brandService: BrandService, private toastr: ToastrService,) { }
+  constructor(private brandService: BrandService, private toaster: ToasterService,) { }
 
   ngOnInit(): void {
     this.getDataUI();
@@ -61,10 +60,15 @@ export class BrandComponent implements OnInit {
       ]
     };
 
-    this.brandService.getData().subscribe(data => {
-      this.dtTrigger.next();
-      this.dt$ = data;
-    }, err => { this.toastr.Error(); });
+    this.brandService.getData().subscribe((result :any) => {
+      if(result.success)
+      {        
+        this.dt$ = result.data;
+        this.dtTrigger.next();
+      }else{
+        this.toaster.Error();
+      }      
+    }, err => { this.toaster.Error(); });
   }
 
   reDraw(): void {
@@ -101,9 +105,16 @@ export class BrandComponent implements OnInit {
 
   async getDataById(id: number) {
     await this.brandService.getDatabyId(id)
-      .then(resp => { this.brand = resp; },
+      .then((result : any) => { 
+      if(result.success)
+      {
+        this.brand = result.data;
+      }else{
+        this.toaster.Error();
+      }
+      },
         (err: any) => {
-          this.toastr.ServerError();
+          this.toaster.Error();
         }
       );
   }
@@ -125,27 +136,64 @@ export class BrandComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
+    }).then((result : any) => {
       if (result.isConfirmed) {
-        this.brandService.deleteData(id).subscribe(data => {
-          this.toastr.Detele();
-          this.reDraw();
-          this.getDataUI();
+        this.brandService.deleteData(id).subscribe((result : any) => {
+          if(result.success)
+          {
+            this.toaster.Detele();
+            this.reDraw();
+            this.getDataUI();
+          }else{
+            this.toaster.Error(result.message);
+          }          
         }, err => {
-          this.toastr.Error();
+          this.toaster.Error();
         });
       }
     })
   }
 
   updateBrand(brand: Brand) {
-    this.brandService.updateData(brand).subscribe(data => {
-      this.toastr.Update();
-      this.closeModalDialog();
-      this.reDraw();
-      this.getDataUI();
-    }, err => {
-      this.errors = [];
+    this.brandService.updateData(brand).subscribe((result : any) => {
+      if(result.success)
+          {
+            this.toaster.Update();
+            this.closeModalDialog();
+            this.reDraw();
+            this.getDataUI();
+          }else{
+            this.toaster.Error();
+          }  
+    }, (err : any) => {
+      this.fieldError(err);
+    });
+  }
+
+  addBrand(brand: Brand) {
+    this.brandService.addData(brand)
+      .subscribe(
+        (result :any) => {
+          if(result.success)
+          {
+            this.errors = [];
+            this.closeModalDialog();
+            this.toaster.Add();
+            this.reDraw();
+            this.getDataUI();
+          }else{
+            this.toaster.Warning('Something went wrong! Please try again');
+          }  
+        },
+        (err: any) => {
+          this.fieldError(err);
+        }
+      );
+  }
+
+  fieldError(err : any)
+  {
+    this.errors = [];
       if (err.status == 400) {
         let validationErrorDictionary = err.error;
         for (var fieldName in validationErrorDictionary) {
@@ -160,47 +208,9 @@ export class BrandComponent implements OnInit {
           }
         }
       } else {
-        this.toastr.Error();
+        this.toaster.Error();
       }
-    });
   }
-
-  addBrand(brand: Brand) {
-    this.brandService.addData(brand)
-      .subscribe(
-        resp => {
-          if (resp != null) {
-            this.errors = [];
-            this.closeModalDialog();
-            this.toastr.Add();
-            this.reDraw();
-            this.getDataUI();
-          } else {
-            this.toastr.Warning('Something went wrong! Please try again');
-          }
-        },
-        (err: any) => {
-          this.errors = [];
-          if (err.status == 400) {
-            let validationErrorDictionary = err.error;
-            for (var fieldName in validationErrorDictionary) {
-              if (validationErrorDictionary.hasOwnProperty(fieldName)) {
-                if (this.formElement.controls[fieldName]) {
-                  this.formElement.controls[fieldName].setErrors({ errorMessage: validationErrorDictionary[fieldName], incorrect: true });
-                  this.formElement.controls[fieldName].markAsTouched();
-                  this.formElement.controls[fieldName].markAsDirty();
-                } else {
-                  this.errors.push(validationErrorDictionary[fieldName]);
-                }
-              }
-            }
-          } else {
-            this.toastr.Error();
-          }
-        }
-      );
-  }
-
   // Model Help
   openModalDialog() {
     this.display = 'block';

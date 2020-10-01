@@ -12,3 +12,9 @@ export class Brand {
     //     this.brandQuality = brandQuality;
     // }
 }
+
+export class Measurement {
+    public id: number;
+    public name: string = "";
+    public description: string = "";
+}

@@ -23,6 +23,7 @@ import { DashboardComponent } from './Dashboard/dashboard.component';
 import { PublicComponent } from './layout/public/public.component';
 import { SecureComponent } from './layout/secure/secure.component';
 import { BrandComponent } from './Master/brand/brand.component';
+import { MeasurementComponent } from './Master/measurement/measurement.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { BrandComponent } from './Master/brand/brand.component';
     DashboardComponent,
     PublicComponent,
     SecureComponent,
-    BrandComponent
+    BrandComponent,
+    MeasurementComponent
   ],
   imports: [
     BrowserModule,

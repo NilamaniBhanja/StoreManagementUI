@@ -15,7 +15,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 
-export class BrandServiceService {
+export class BrandService {
 
   constructor(private http: HttpClient) { }
 

@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { AppSettings } from 'src/app/AppSettings';
-import { Brand } from 'src/app/Model/Master.Model';
-import { BrandServiceService } from 'src/app/Service/brand-service.service';
-import { ToastrService } from 'src/app/Service/toastr.service';
 import Swal from 'sweetalert2';
+
+import { Brand } from 'src/app/Model/Master.Model';
+import { BrandService } from 'src/app/Service/brand.service';
+import { ToastrService } from 'src/app/Service/toastr.service';
 
 
 @Component({
@@ -16,10 +16,7 @@ import Swal from 'sweetalert2';
   ]
 })
 
-
-
 export class BrandComponent implements OnInit {
-
   brand: Brand;
   display = 'none';
   fieldReadonly = true;
@@ -36,17 +33,19 @@ export class BrandComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
-
-
-
-  constructor(private brandServiceService: BrandServiceService, private toastr: ToastrService,) { }
+  constructor(private brandService: BrandService, private toastr: ToastrService,) { }
 
   ngOnInit(): void {
-    // this.toastr.Warning('You successfully updated your product.', 'Product Name : ');
     this.getDataUI();
   }
-  getDataUI() {
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
 
+  getDataUI() {
     this.dtOptions = {
       retrieve: true,
       destroy: true,
@@ -62,19 +61,12 @@ export class BrandComponent implements OnInit {
       ]
     };
 
-    this.brandServiceService.getData().subscribe(data => {
+    this.brandService.getData().subscribe(data => {
       this.dtTrigger.next();
       this.dt$ = data;
-    }, err => { console.log(err); });
+    }, err => { this.toastr.Error(); });
   }
 
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
-  }
   reDraw(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.clear().draw();
@@ -85,7 +77,6 @@ export class BrandComponent implements OnInit {
 
   // Add, Edit and View of Brand
   openModel(id: number, type: string) {
-    console.log(this.submitText, id, type);
     this.formElement.reset();
     this.errors = [];
     if (id == 0 && type == "Add") {
@@ -99,20 +90,21 @@ export class BrandComponent implements OnInit {
       this.fieldReadonly = false;
       this.modelHeader = 'Update Brand';
       this.getDataById(id);
-      console.log(this.brand);
     } else if (id > 0 && type == "View") {
       this.submitText = '';
       this.fieldReadonly = true;
-      this.modelHeader = 'Details Brand';
+      this.modelHeader = 'Detail Brand';
       this.getDataById(id);
     }
     this.openModalDialog();
   }
 
   async getDataById(id: number) {
-    await this.brandServiceService.getDatabyId(id)
+    await this.brandService.getDatabyId(id)
       .then(resp => { this.brand = resp; },
-        (err: any) => console.log(err)
+        (err: any) => {
+          this.toastr.ServerError();
+        }
       );
   }
 
@@ -123,6 +115,7 @@ export class BrandComponent implements OnInit {
       this.addBrand(this.brand);
     }
   }
+
   onDelete(id: number) {
     Swal.fire({
       title: 'Are you sure?',
@@ -134,42 +127,24 @@ export class BrandComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-
-        this.brandServiceService.deleteData(id).subscribe(data => {
-          console.log(data);
-          AppSettings.Toast.fire({
-            icon: 'success',
-            background: '#51A351',
-            title: 'Your file has been deleted.'
-          })
+        this.brandService.deleteData(id).subscribe(data => {
+          this.toastr.Detele();
           this.reDraw();
           this.getDataUI();
         }, err => {
-          AppSettings.Toast.fire({
-            icon: 'error',
-            background: '#bf443d',
-            title: 'Something went wrong!'
-          })
+          this.toastr.Error();
         });
       }
     })
   }
 
   updateBrand(brand: Brand) {
-    this.brandServiceService.updateData(brand).subscribe(data => {
-      console.log(data);
-      // this.toastr.success('Data updated successfully.');
-      AppSettings.Toast.fire({
-        icon: 'success',
-        background: '#51A351',
-        title: 'Data updated successfully.'
-      })
-
+    this.brandService.updateData(brand).subscribe(data => {
+      this.toastr.Update();
       this.closeModalDialog();
       this.reDraw();
       this.getDataUI();
     }, err => {
-      console.log(err);
       this.errors = [];
       if (err.status == 400) {
         let validationErrorDictionary = err.error;
@@ -185,38 +160,23 @@ export class BrandComponent implements OnInit {
           }
         }
       } else {
-        AppSettings.Toast.fire({
-          icon: 'error',
-          background: '#bf443d',
-          title: 'Something went wrong in Server!'
-        });
+        this.toastr.Error();
       }
-
     });
   }
 
-
-
   addBrand(brand: Brand) {
-    this.brandServiceService.addData(brand)
+    this.brandService.addData(brand)
       .subscribe(
         resp => {
           if (resp != null) {
             this.errors = [];
             this.closeModalDialog();
-            AppSettings.Toast.fire({
-              icon: 'success',
-              background: '#51A351',
-              title: 'Data created successfully'
-            })
+            this.toastr.Add();
             this.reDraw();
             this.getDataUI();
           } else {
-            AppSettings.Toast.fire({
-              icon: 'warning',
-              background: '#d68511',
-              title: 'Something went wrong! Please try again'
-            });
+            this.toastr.Warning('Something went wrong! Please try again');
           }
         },
         (err: any) => {
@@ -235,17 +195,11 @@ export class BrandComponent implements OnInit {
               }
             }
           } else {
-
-            AppSettings.Toast.fire({
-              icon: 'error',
-              background: '#bf443d',
-              title: 'Something went wrong in Server!'
-            });
+            this.toastr.Error();
           }
         }
       );
   }
-
 
   // Model Help
   openModalDialog() {

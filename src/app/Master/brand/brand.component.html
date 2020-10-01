@@ -75,12 +75,15 @@
 
             <div class="form-group">
               <label for="Name">Name</label>
-              <input type="text" name="Name" class="form-control" required autofocus="autofocus" #Name="ngModel"
+              <input type="text" name="Name" class="form-control" 
+              required  minlength="5"  maxlength="100" autofocus="autofocus" #Name="ngModel"
                 [readonly]="fieldReadonly" [(ngModel)]="brand.name">
 
               <span class="help-block" *ngIf="!Name.valid && Name.touched">
                 <div *ngIf="Name.errors?.required">Please enter Brand Name.</div>
                 <div *ngIf="Name.errors?.incorrect">{{Name.errors.errorMessage}}</div>
+                <div *ngIf="Name.errors?.minlength">Name must be at least 5 characters long.</div> 
+                <div *ngIf="Name.errors?.maxlength">Name can be max 100 characters long.</div> 
               </span>
 
 
@@ -88,23 +91,27 @@
 
             <div class="form-group">
               <label for="Description">Description</label>
-              <input type="text" id="Description" name="Description" class="form-control" required
+              <input type="text" id="Description" name="Description" class="form-control" 
+              required maxlength="250" 
                 #Description="ngModel" [readonly]="fieldReadonly" [(ngModel)]="brand.description">
 
               <span class="help-block" *ngIf="!Description.valid && Description.touched">
                 <div *ngIf="Description.errors?.required">Please enter Brand Description.</div>
                 <div *ngIf="Description.errors?.incorrect">{{Description.errors.errorMessage}}</div>
+                <div *ngIf="Description.errors?.maxlength">Description can be max 250 characters long.</div> 
               </span>
 
 
             </div>
             <div class="form-group">
               <label for="BrandQuality">BrandQuality</label>
-              <input type="text" name="BrandQuality" class="form-control" required #BrandQuality="ngModel"
+              <input type="text" name="BrandQuality" class="form-control" 
+              required  maxlength="100" #BrandQuality="ngModel"
                 [readonly]="fieldReadonly" [(ngModel)]="brand.brandQuality">
               <span class="help-block" *ngIf="!BrandQuality.valid && BrandQuality.touched">
                 <div *ngIf="BrandQuality.errors?.required">Please enter Brand Quality.</div>
                 <div *ngIf="BrandQuality.errors?.incorrect">{{BrandQuality.errors.errorMessage}}</div>
+                <div *ngIf="BrandQuality.errors?.maxlength">BrandQuality can be max 100 characters long.</div>
               </span>
             </div>
 

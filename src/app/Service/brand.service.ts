@@ -1,4 +1,4 @@
-import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppSettings } from '../AppSettings';
@@ -19,18 +19,8 @@ export class BrandService {
 
   constructor(private http: HttpClient) { }
 
-  getData(): Observable<Brand[]> {
-    return this.http.get<Brand[]>(API_URL, httpOptions);
-  }
-
-  toQueryString(obj) {
-    var parts = [];
-    for (var property in obj) {
-      var value = obj[property];
-      if (value != null && value != undefined)
-        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
-    }
-    return parts.join('&');
+  getData(): Promise<Brand[]> {
+    return this.http.get<Brand[]>(API_URL, httpOptions).toPromise();
   }
 
   async getDatabyId(id: number): Promise<Brand> {

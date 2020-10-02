@@ -1,11 +1,11 @@
-<h1 class="mt-4">Measurement</h1>
+<h1 class="mt-4">Store</h1>
 <hr />
 
 
 <div class="card mb-4">
 
   <!-- Header -->
-  <div class="card-header"><i class="fas fa-table mr-1"></i>Measurement List
+  <div class="card-header"><i class="fas fa-table mr-1"></i>Store List
     <div class="float-right">
       <a class="btn btn-info" data-toggle="modal" (click)="openModel(0, 'Add')"><i class="fa fa-plus"></i></a>
     </div>
@@ -21,7 +21,12 @@
           <tr class="table-info">
             <th>ID</th>
             <th>Name</th>
-            <th>Description</th>
+            <th>Store Type</th>
+            <th>Business Type</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Mobile No</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -29,7 +34,12 @@
           <tr *ngFor="let dt of data">
             <td>{{ dt.id }}</td>
             <td>{{ dt.name }}</td>
-            <td>{{ dt.description }}</td>
+            <td>{{ dt.storeType }}</td>
+            <td>{{ dt.businessType }}</td>
+            <td>{{ dt.address.address1 }}</td>
+            <td>{{ dt.address.city }}</td>
+            <td>{{ dt.address.state }}</td>
+            <td>{{ dt.address.mobileNo }}</td>
             <td>
               <button type="button" (click)="openModel(dt.id,'Edit')" class="btn btn-success text-white Edit"
                 style="cursor:pointer">
@@ -53,15 +63,15 @@
     [ngStyle]="{'display':display}">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <form #measurementForm="ngForm" (ngSubmit)="onSubmit()">
+        <form #storeForm="ngForm" (ngSubmit)="onSubmit()">
           <div class="modal-header">
             <h4 class="modal-title" id="myModalLabel"> {{modelHeader}} </h4>
             <button type="button" class="close" aria-label="Close" (click)="closeModalDialog()">
               <i class="fa fa-times"></i></button>
           </div>
 
-          <div *ngIf="measurement" class="modal-body">
-            <input type="hidden" id="measurementId" name="MeasurementId" [(ngModel)]="measurement.id"><br />
+          <div *ngIf="store" class="modal-body">
+            <input type="hidden" id="storeId" name="StoreId" [(ngModel)]="store.id"><br />
 
             <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
               <ul>
@@ -73,14 +83,14 @@
 
             <div class="form-group">
               <label for="Name">Name</label>
-              <input type="text" name="Name" class="form-control" 
-              required  maxlength="100" autofocus="autofocus" #Name="ngModel"
-                [readonly]="fieldReadonly" [(ngModel)]="measurement.name">
+              <input type="text" name="Name" class="form-control" required minlength="5" maxlength="100"
+                autofocus="autofocus" #Name="ngModel" [readonly]="fieldReadonly" [(ngModel)]="store.name">
 
               <span class="help-block" *ngIf="!Name.valid && Name.touched">
-                <div *ngIf="Name.errors?.required">Please enter Measurement Name.</div>
+                <div *ngIf="Name.errors?.required">Please enter Store Name.</div>
                 <div *ngIf="Name.errors?.incorrect">{{Name.errors.errorMessage}}</div>
-                <div *ngIf="Name.errors?.maxlength">Name can be max 100 characters long.</div> 
+                <div *ngIf="Name.errors?.minlength">Name must be at least 5 characters long.</div>
+                <div *ngIf="Name.errors?.maxlength">Name can be max 100 characters long.</div>
               </span>
 
 
@@ -88,22 +98,34 @@
 
             <div class="form-group">
               <label for="Description">Description</label>
-              <input type="text" id="Description" name="Description" class="form-control" 
-              required maxlength="250" 
-                #Description="ngModel" [readonly]="fieldReadonly" [(ngModel)]="measurement.description">
+              <input type="text" id="Description" name="Description" class="form-control" required maxlength="250"
+                #Description="ngModel" [readonly]="fieldReadonly" [(ngModel)]="store.storeType">
 
               <span class="help-block" *ngIf="!Description.valid && Description.touched">
-                <div *ngIf="Description.errors?.required">Please enter Measurement Description.</div>
+                <div *ngIf="Description.errors?.required">Please enter Store Description.</div>
                 <div *ngIf="Description.errors?.incorrect">{{Description.errors.errorMessage}}</div>
-                <div *ngIf="Description.errors?.maxlength">Description can be max 250 characters long.</div> 
+                <div *ngIf="Description.errors?.maxlength">Description can be max 250 characters long.</div>
+              </span>
+
+
+            </div>
+            <div class="form-group">
+              <label for="StoreQuality">StoreQuality</label>
+              <input type="text" name="StoreQuality" class="form-control" required maxlength="100"
+                #StoreQuality="ngModel" [readonly]="fieldReadonly" [(ngModel)]="store.businessType">
+
+
+              <span class="help-block" *ngIf="!StoreQuality.valid && StoreQuality.touched">
+                <div *ngIf="StoreQuality.errors?.required">Please enter Store Quality.</div>
+                <div *ngIf="StoreQuality.errors?.incorrect">{{StoreQuality.errors.errorMessage}}</div>
+                <div *ngIf="StoreQuality.errors?.maxlength">StoreQuality can be max 100 characters long.</div>
               </span>
             </div>
-           
 
           </div>
 
           <div *ngIf="submitText" class="modal-footer">
-            <button [disabled]="!measurementForm.valid" type="submit" class="btn btn-primary">{{submitText}}</button>
+            <button [disabled]="!storeForm.valid" type="submit" class="btn btn-primary">{{submitText}}</button>
             <button type="button" class="btn btn-danger" (click)="closeModalDialog()">Close</button>
           </div>
         </form>

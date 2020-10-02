@@ -5,16 +5,16 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 
-import { Brand } from 'src/app/Model/Master.Model';
-import { BrandService } from 'src/app/Service/brand.service';
+import { Store } from 'src/app/Model/Master.Model';
+import { StoreService } from 'src/app/Service/store.service';
 @Component({
-  selector: 'app-brand',
-  templateUrl: './brand.component.html',
+  selector: 'app-store',
+  templateUrl: './store.component.html',
   styles: [
   ]
 })
-export class BrandComponent implements OnInit {
-  brand: Brand;
+export class StoreComponent implements OnInit {
+  store: Store;
   display = 'none';
   fieldReadonly = true;
   submitText = 'Create';
@@ -30,7 +30,7 @@ export class BrandComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
-  constructor(private brandService: BrandService, private toaster: ToasterService) { }
+  constructor(private storeService: StoreService, private toaster: ToasterService) { }
 
   ngOnInit(): void {
     this.getDataUI();
@@ -44,7 +44,7 @@ export class BrandComponent implements OnInit {
 
   getDataUI() {
     this.data = [];
-    this.brandService.getData().then((result: any) => {
+    this.storeService.getData().then((result: any) => {
       if (result.success) {
         this.reDraw();
         this.data = result.data;
@@ -55,13 +55,15 @@ export class BrandComponent implements OnInit {
     );
     this.dtOptions = {
       destroy: true,
-      retrieve: true,
+      retrieve: true,      
       pagingType: 'simple_numbers',
       pageLength: 10,
       processing: true,
       columns: [
-        null,null,        
-        null,null,
+        null, null,
+        null, null,
+        null, null,
+        null, null,
         { "width": "18%", "orderable": false, "searchable": false }
       ]
     };
@@ -74,36 +76,36 @@ export class BrandComponent implements OnInit {
     });
   }
 
-  // Add, Edit and View of Brand
+  // Add, Edit and View of Store
   openModel(id: number, type: string) {
     this.formElement.reset();
     this.errors = [];
     if (id == 0 && type == "Add") {
       this.submitText = 'Create';
       this.fieldReadonly = false;
-      this.modelHeader = 'Add Brand';
-      this.brand = new Brand();
+      this.modelHeader = 'Add Store';
+      this.store = new Store();
     }
     else if (id > 0 && type == "Edit") {
       this.submitText = 'Update';
       this.fieldReadonly = false;
-      this.modelHeader = 'Update Brand';
+      this.modelHeader = 'Update Store';
       this.getDataById(id);
-    } 
+    }
     else if (id > 0 && type == "View") {
       this.submitText = '';
       this.fieldReadonly = true;
-      this.modelHeader = 'Detail Brand';
+      this.modelHeader = 'Detail Store';
       this.getDataById(id);
     }
     this.openModalDialog();
   }
 
   async getDataById(id: number) {
-    await this.brandService.getDatabyId(id)
+    await this.storeService.getDatabyId(id)
       .then((result: any) => {
         if (result.success) {
-          this.brand = result.data;
+          this.store = result.data;
         } else {
           this.toaster.Error(result.message);
         }
@@ -116,9 +118,9 @@ export class BrandComponent implements OnInit {
 
   onSubmit() {
     if (this.submitText === 'Update') {
-      this.updateBrand(this.brand);
+      this.updateStore(this.store);
     } else {
-      this.addBrand(this.brand);
+      this.addStore(this.store);
     }
   }
 
@@ -133,7 +135,7 @@ export class BrandComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.brandService.deleteData(id).subscribe((result: any) => {
+        this.storeService.deleteData(id).subscribe((result: any) => {
           if (result.success) {
             this.toaster.Detele();
             this.reDraw();
@@ -147,8 +149,8 @@ export class BrandComponent implements OnInit {
     })
   }
 
-  updateBrand(brand: Brand) {
-    this.brandService.updateData(brand).subscribe((result: any) => {
+  updateStore(store: Store) {
+    this.storeService.updateData(store).subscribe((result: any) => {
       if (result.success) {
         this.toaster.Update();
         this.closeModalDialog();
@@ -161,8 +163,8 @@ export class BrandComponent implements OnInit {
     });
   }
 
-  addBrand(brand: Brand) {
-    this.brandService.addData(brand)
+  addStore(store: Store) {
+    this.storeService.addData(store)
       .subscribe(
         resp => {
           if (resp != null) {

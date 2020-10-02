@@ -1,4 +1,4 @@
-import { HttpClient,  HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AppSettings } from '../AppSettings';
@@ -19,30 +19,20 @@ export class MeasurementService {
 
   constructor(private http: HttpClient) { }
 
-  getData(): Observable<Measurement[]> {
-    return this.http.get<Measurement[]>(API_URL, httpOptions);
+  getData(): Promise<Measurement[]> {
+    return this.http.get<Measurement[]>(API_URL, httpOptions).toPromise();
   }
 
-  toQueryString(obj) {
-    var parts = [];
-    for (var property in obj) {
-      var value = obj[property];
-      if (value != null && value != undefined)
-        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
-    }
-    return parts.join('&');
-  }
-
-  async getDatabyId(id: number): Promise<Measurement> {
+  getDatabyId(id: number): Promise<Measurement> {
     return this.http.get<Measurement>(API_URL + id, httpOptions).toPromise();
   }
 
-  addData(brand: Measurement) {
-    return this.http.post(API_URL, brand, httpOptions);
+  addData(measurement: Measurement) {
+    return this.http.post(API_URL, measurement, httpOptions);
   }
 
-  updateData(brand: Measurement) {
-    return this.http.put(API_URL, brand, httpOptions);
+  updateData(measurement: Measurement) {
+    return this.http.put(API_URL, measurement, httpOptions);
   }
 
   deleteData(id: number) {

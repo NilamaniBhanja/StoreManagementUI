@@ -1,3 +1,5 @@
+import { SupplierService } from 'src/app/Service/supplier.service';
+import { Supplier } from './../../Model/Master.Model';
 import { ToasterService } from 'src/app/Service/toaster.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Form, NgForm } from '@angular/forms';
@@ -5,16 +7,14 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
 
-import { Brand } from 'src/app/Model/Master.Model';
-import { BrandService } from 'src/app/Service/brand.service';
 @Component({
-  selector: 'app-brand',
-  templateUrl: './brand.component.html',
+  selector: 'app-supplier',
+  templateUrl: './supplier.component.html',
   styles: [
   ]
 })
-export class BrandComponent implements OnInit {
-  brand: Brand;
+export class SupplierComponent implements OnInit {
+  supplier: Supplier;
   
 
   display = 'none';
@@ -32,23 +32,25 @@ export class BrandComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement: DataTableDirective;
 
-  constructor(private brandService: BrandService, private toaster: ToasterService) { }
+  constructor(private supplierService: SupplierService, private toaster: ToasterService) { }
 
   ngOnInit(): void {
     this.getDataUI();
     this.dtOptions = {
       destroy: true,
-      retrieve: true,
+      retrieve: true,      
       pagingType: 'simple_numbers',
       pageLength: 10,
       processing: true,
       columns: [
-        null,null,        
-        null,null,
+        null, null,
+        null, null,
+        null, null,
+        null, null,
         { "width": "18%", "orderable": false, "searchable": false }
       ]
     };
-	
+
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
@@ -59,7 +61,7 @@ export class BrandComponent implements OnInit {
 
   getDataUI() {
     this.data = [];
-    this.brandService.getData().then((result: any) => {
+    this.supplierService.getData().then((result: any) => {
       if (result.success) {
         this.render();
         this.data = result.data;
@@ -83,36 +85,38 @@ export class BrandComponent implements OnInit {
       this.dtTrigger.next();
     });
   }
-  // Add, Edit and View of Brand
+  // Add, Edit and View of Supplier
   openModel(id: number, type: string) {
     this.formElement.reset();
     this.errors = [];
     if (id == 0 && type == "Add") {
       this.submitText = 'Create';
       this.fieldReadonly = false;
-      this.modelHeader = 'Add Brand';
-      this.brand = new Brand();
+      this.modelHeader = 'Add Supplier';
+      this.supplier ={};
+      this.supplier.address = {};
+      this.supplier.address.country = "India";
       this.openModalDialog();
     }
     else if (id > 0 && type == "Edit") {
       this.submitText = 'Update';
       this.fieldReadonly = false;
-      this.modelHeader = 'Update Brand';
+      this.modelHeader = 'Update Supplier';
       this.getDataById(id);
     }
     else if (id > 0 && type == "View") {
       this.submitText = '';
       this.fieldReadonly = true;
-      this.modelHeader = 'Detail Brand';
+      this.modelHeader = 'Detail Supplier';
       this.getDataById(id);
-    }
+    }    
   }
 
   async getDataById(id: number) {
-    await this.brandService.getDatabyId(id)
+    await this.supplierService.getDatabyId(id)
       .then((result: any) => {
         if (result.success) {
-          this.brand = result.data;
+          this.supplier = result.data;
           this.openModalDialog();
         } else {
           this.toaster.Error(result.message);
@@ -126,9 +130,9 @@ export class BrandComponent implements OnInit {
 
   onSubmit() {
     if (this.submitText === 'Update') {
-      this.updateBrand(this.brand);
+      this.updateSupplier(this.supplier);
     } else {
-      this.addBrand(this.brand);
+      this.addSupplier(this.supplier);
     }        
   }
 
@@ -143,7 +147,7 @@ export class BrandComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.brandService.deleteData(id).subscribe((result: any) => {
+        this.supplierService.deleteData(id).subscribe((result: any) => {
           if (result.success) {
             this.toaster.Detele();
             this.render();
@@ -158,8 +162,8 @@ export class BrandComponent implements OnInit {
     })
   }
 
-  updateBrand(brand: Brand) {
-    this.brandService.updateData(brand).subscribe((result: any) => {
+  updateSupplier(supplier: Supplier) {
+    this.supplierService.updateData(supplier).subscribe((result: any) => {
       if (result.success) {
         this.toaster.Update();
         this.closeModalDialog();
@@ -173,8 +177,8 @@ export class BrandComponent implements OnInit {
     });
   }
 
-  addBrand(brand: Brand) {
-    this.brandService.addData(brand)
+  addSupplier(supplier: Supplier) {
+    this.supplierService.addData(supplier)
       .subscribe(
         resp => {
           if (resp != null) {

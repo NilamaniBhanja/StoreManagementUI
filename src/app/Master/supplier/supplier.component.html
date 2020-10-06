@@ -1,0 +1,265 @@
+<h1 class="mt-4">Supplier</h1>
+<hr />
+
+
+<div class="card mb-4">
+
+  <!-- Header -->
+  <div class="card-header"><i class="fas fa-table mr-1"></i>Supplier List
+    <div class="float-right">
+      <a class="btn btn-info" data-toggle="modal" (click)="openModel(0, 'Add')"><i class="fa fa-plus"></i></a>
+    </div>
+  </div>
+
+  <!-- Table Body -->
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-bordered" id="dataTable" cellspacing="0" style="width:100%" datatable
+        [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+
+        <thead class="thead-active">
+          <tr class="table-info">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Supplier Type</th>
+            <th>Business Type</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Mobile No</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dt of data">
+            <td>{{ dt.id }}</td>
+            <td>{{ dt.name }}</td>
+            <td>{{ dt.supplierType }}</td>
+            <td>{{ dt.businessType }}</td>
+            <td>{{ dt.address.address1 }}</td>
+            <td>{{ dt.address.city }}</td>
+            <td>{{ dt.address.state }}</td>
+            <td>{{ dt.address.mobileNo }}</td>
+            <td>
+              <button type="button" (click)="openModel(dt.id,'Edit')" class="btn btn-success text-white Edit"
+                style="cursor:pointer">
+                <i class="fas fa-edit"></i>
+              </button> |
+              <a (click)="openModel(dt.id,'View')" class="btn btn-info text-white" style="cursor:pointer">
+                <i class="fas fa-eye"></i>
+              </a> |
+              <a class="btn btn-danger text-white" style="cursor:pointer" (click)="onDelete(dt.id)">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit and View Modal -->
+  <div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [ngStyle]="{'display':display}">
+    <div class="modal-dialog  modal-lg" role="document">
+      <div class="modal-content">
+        <form #supplierForm="ngForm" (ngSubmit)="onSubmit()">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel"> {{modelHeader}} </h4>
+            <button type="button" class="close" aria-label="Close" (click)="closeModalDialog()">
+              <i class="fa fa-times"></i></button>
+          </div>
+         
+          <div *ngIf="supplier" class="modal-body">
+            <input type="hidden" id="SupplierId" name="SupplierId" [(ngModel)]="supplier.id">
+            <!-- <input type="hidden" id="supplieraddressesId" name="supplieraddressesId" [(ngModel)]="supplier.addressesId"> -->
+            <input type="hidden" id="addressId" name="addressId" [(ngModel)]="supplier.address.id">
+
+            <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
+              <ul>
+                <li *ngFor="let error of errors">
+                  {{ error }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="form-group">
+              <label for="Name">Name</label>
+              <input type="text" name="Name" class="form-control" autofocus="true" required minlength="5" maxlength="200"
+                autofocus="true" #Name="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.name">
+              <span class="help-block" *ngIf="!Name.valid && Name.touched">
+                <div *ngIf="Name.errors?.required">Please enter supplier Name.</div>
+                <div *ngIf="Name.errors?.incorrect">{{Name.errors.errorMessage}}</div>
+                <div *ngIf="Name.errors?.minlength">Name must be at least 5 characters long.</div>
+                <div *ngIf="Name.errors?.maxlength">Name can be max 200 characters long.</div>
+              </span>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="SupplierType">Supplier Type</label>
+                  <input type="text" name="SupplierType" class="form-control" required minlength="5" maxlength="150"
+                     #SupplierType="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.supplierType">
+                  <span class="help-block" *ngIf="!SupplierType.valid && SupplierType.touched">
+                    <div *ngIf="SupplierType.errors?.required">Please enter supplier type.</div>
+                    <div *ngIf="SupplierType.errors?.incorrect">{{SupplierType.errors.errorMessage}}</div>
+                    <div *ngIf="SupplierType.errors?.minlength">Supplier Type must be at least 5 characters long.</div>
+                    <div *ngIf="SupplierType.errors?.maxlength">Supplier Type can be max 150 characters long.</div>
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="BusinessType">Business Type</label>
+                  <input type="text" name="BusinessType" class="form-control" required minlength="5" maxlength="150"
+                     #BusinessType="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.businessType">
+                  <span class="help-block" *ngIf="!BusinessType.valid && BusinessType.touched">
+                    <div *ngIf="BusinessType.errors?.required">Please enter supplier type.</div>
+                    <div *ngIf="BusinessType.errors?.incorrect">{{BusinessType.errors.errorMessage}}</div>
+                    <div *ngIf="BusinessType.errors?.minlength">Business Type must be at least 5 characters long.</div>
+                    <div *ngIf="BusinessType.errors?.maxlength">Business Type can be max 150 characters long.</div>
+                  </span>
+                </div> 
+              </div>
+            </div>
+            
+  <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="Address1">Address 1</label>
+                  <input type="text" name="Address1" class="form-control" required  maxlength="200"
+                     #Address1="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.address1">
+                  <span class="help-block" *ngIf="!Address1.valid && Address1.touched">
+                    <div *ngIf="Address1.errors?.required">Please enter supplier type.</div>
+                    <div *ngIf="Address1.errors?.incorrect">{{Address1.errors.errorMessage}}</div>
+                    <div *ngIf="Address1.errors?.maxlength">Address 1 can be max 200 characters long.</div>
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="Address2">Address 2</label>
+                  <input type="text" name="Address2" class="form-control"  maxlength="200"
+                     #Address2="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.address2">
+                  <span class="help-block" *ngIf="!Address2.valid && Address2.touched">
+                    <div *ngIf="Address2.errors?.incorrect">{{Address2.errors.errorMessage}}</div>
+                    <div *ngIf="Address2.errors?.maxlength">Address 2 can be max 200 characters long.</div>
+                  </span>
+                </div>
+              </div>
+            </div>     
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="City">City</label>
+                  <input type="text" name="City" class="form-control" required  maxlength="100"
+                     #City="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.city">
+                  <span class="help-block" *ngIf="!City.valid && City.touched">
+                    <div *ngIf="City.errors?.required">Please enter city.</div>
+                    <div *ngIf="City.errors?.incorrect">{{City.errors.errorMessage}}</div>
+                    <div *ngIf="City.errors?.maxlength">City can be max 100 characters long.</div>
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="State">State</label>
+                  <input type="text" name="State" class="form-control" required maxlength="100" 
+                     #State="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.state">
+                  <span class="help-block" *ngIf="!State.valid && State.touched">
+                    <div *ngIf="State.errors?.required">Please enter state.</div>
+                    <div *ngIf="State.errors?.incorrect">{{State.errors.errorMessage}}</div>
+                    <div *ngIf="State.errors?.maxlength">State can be max 100 characters long.</div>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="Country">Country</label>
+                  <input type="text" name="Country" class="form-control" required maxlength="100" 
+                     #Country="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.country">
+                  <span class="help-block" *ngIf="!Country.valid && Country.touched">
+                    <div *ngIf="Country.errors?.required">Please enter country.</div>
+                    <div *ngIf="Country.errors?.incorrect">{{Country.errors.errorMessage}}</div>
+                    <div *ngIf="Country.errors?.maxlength">Country can be max 100 characters long.</div>
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="PinCode">Pin Code</label>
+                  <input type="text" name="PinCode" class="form-control" required minlength="6" maxlength="15"
+                     #PinCode="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.pinCode">
+                  <span class="help-block" *ngIf="!PinCode.valid && PinCode.touched">
+                    <div *ngIf="PinCode.errors?.required">Please enter pin code.</div>
+                    <div *ngIf="PinCode.errors?.incorrect">{{PinCode.errors.errorMessage}}</div>
+                    <div *ngIf="PinCode.errors?.minlength">Pin Code must be at least 6 characters long.</div>
+                    <div *ngIf="PinCode.errors?.maxlength">Pin Code can be max 15 characters long.</div>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="MobileNo">Mobile Number</label>
+                  <input type="text" name="MobileNo" class="form-control" required minlength="10" 
+                     #MobileNo="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.mobileNo">
+                  <span class="help-block" *ngIf="!MobileNo.valid && MobileNo.touched">
+                    <div *ngIf="MobileNo.errors?.required">Please enter mobile number.</div>
+                    <div *ngIf="MobileNo.errors?.incorrect">{{MobileNo.errors.errorMessage}}</div>
+                    <div *ngIf="MobileNo.errors?.minlength">Mobile Number must be 10 characters long.</div>
+                  </span>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="LandLine">Land Line Number</label>
+                  <input type="text" name="LandLine" class="form-control" minlength="10" 
+                     #LandLine="ngModel" [readonly]="fieldReadonly" [(ngModel)]="supplier.address.landLine">
+                  <span class="help-block" *ngIf="!LandLine.valid && LandLine.touched">
+                    <div *ngIf="LandLine.errors?.incorrect">{{LandLine.errors.errorMessage}}</div>
+                    <div *ngIf="LandLine.errors?.minlength">Land line number must be 10 characters long.</div>
+                  </span>
+                </div> 
+              </div>
+            </div>
+
+            <!-- <div class="row">
+              <div class="col">
+                
+              </div>
+              <div class="col">
+                
+              </div>
+            </div>         -->
+
+           
+            
+            
+            
+            
+            
+            
+            
+
+          </div>
+
+          <div *ngIf="submitText" class="modal-footer">
+            <button [disabled]="!supplierForm.valid" type="submit" class="btn btn-primary">{{submitText}}</button>
+            <button type="button" class="btn btn-danger" (click)="closeModalDialog()">Close</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

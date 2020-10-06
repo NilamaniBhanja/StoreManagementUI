@@ -1,6 +1,6 @@
 import { ToasterService } from 'src/app/Service/toaster.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Form, NgForm } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -15,6 +15,8 @@ import { MeasurementService } from 'src/app/Service/measurement.service';
 })
 export class MeasurementComponent implements OnInit {
   measurement: Measurement;
+  
+
   display = 'none';
   fieldReadonly = true;
   submitText = 'Create';
@@ -34,25 +36,6 @@ export class MeasurementComponent implements OnInit {
 
   ngOnInit(): void {
     this.getDataUI();
-  }
-  ngAfterViewInit(): void {
-    this.dtTrigger.next();
-  }
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-  }
-
-  getDataUI() {
-    this.data = [];
-    this.measurementService.getData().then((result: any) => {
-      if (result.success) {
-        this.reDraw();
-        this.data = result.data;
-      } else {
-        this.toaster.Error(result.message);
-      }
-    }, err => { this.toaster.Error(); }
-    );
     this.dtOptions = {
       destroy: true,
       retrieve: true,
@@ -67,14 +50,39 @@ export class MeasurementComponent implements OnInit {
       ]
     };
   }
+  ngAfterViewInit(): void {
+    this.dtTrigger.next();
+  }
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
+  getDataUI() {
+    this.data = [];
+    this.measurementService.getData().then((result: any) => {
+      if (result.success) {
+        this.render();
+        this.data = result.data;
+      } else {
+        this.toaster.Error(result.message);
+      }
+    }, err => { this.toaster.Error(); }
+    );  
+  }
 
   reDraw(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {      
+      dtInstance.clear().draw();
       dtInstance.destroy();
       this.dtTrigger.next();
     });
   }
-
+  render(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {   
+      dtInstance.destroy();
+      this.dtTrigger.next();
+    });
+  }
   // Add, Edit and View of Measurement
   openModel(id: number, type: string) {
     this.formElement.reset();
@@ -84,20 +92,20 @@ export class MeasurementComponent implements OnInit {
       this.fieldReadonly = false;
       this.modelHeader = 'Add Measurement';
       this.measurement = new Measurement();
+      this.openModalDialog();
     }
     else if (id > 0 && type == "Edit") {
       this.submitText = 'Update';
       this.fieldReadonly = false;
       this.modelHeader = 'Update Measurement';
       this.getDataById(id);
-    } 
+    }
     else if (id > 0 && type == "View") {
       this.submitText = '';
       this.fieldReadonly = true;
       this.modelHeader = 'Detail Measurement';
       this.getDataById(id);
     }
-    this.openModalDialog();
   }
 
   async getDataById(id: number) {
@@ -105,6 +113,7 @@ export class MeasurementComponent implements OnInit {
       .then((result: any) => {
         if (result.success) {
           this.measurement = result.data;
+          this.openModalDialog();
         } else {
           this.toaster.Error(result.message);
         }
@@ -120,7 +129,7 @@ export class MeasurementComponent implements OnInit {
       this.updateMeasurement(this.measurement);
     } else {
       this.addMeasurement(this.measurement);
-    }
+    }        
   }
 
   onDelete(id: number) {
@@ -137,7 +146,8 @@ export class MeasurementComponent implements OnInit {
         this.measurementService.deleteData(id).subscribe((result: any) => {
           if (result.success) {
             this.toaster.Detele();
-            this.reDraw();
+            this.render();
+            this.getDataUI();
           } else {
             this.toaster.Error(result.message);
           }
@@ -154,6 +164,7 @@ export class MeasurementComponent implements OnInit {
         this.toaster.Update();
         this.closeModalDialog();
         this.reDraw();
+        this.getDataUI();
       } else {
         this.toaster.Error();
       }
@@ -171,6 +182,7 @@ export class MeasurementComponent implements OnInit {
             this.closeModalDialog();
             this.toaster.Add();
             this.reDraw();
+        this.getDataUI();
           } else {
             this.toaster.Warning('Something went wrong! Please try again');
           }
@@ -185,16 +197,15 @@ export class MeasurementComponent implements OnInit {
     this.errors = [];
     if (err.status == 400) {
       let validationErrorDictionary = err.error;
-      for (var fieldName in validationErrorDictionary) {
-        if (validationErrorDictionary.hasOwnProperty(fieldName)) {
+      for (var serverfieldName in validationErrorDictionary) {
+          var fieldName = serverfieldName.split('.')[serverfieldName.split('.').length -1];
           if (this.formElement.controls[fieldName]) {
-            this.formElement.controls[fieldName].setErrors({ errorMessage: validationErrorDictionary[fieldName], incorrect: true });
+            this.formElement.controls[fieldName].setErrors({ errorMessage: validationErrorDictionary[serverfieldName], incorrect: true });
             this.formElement.controls[fieldName].markAsTouched();
             this.formElement.controls[fieldName].markAsDirty();
           } else {
             this.errors.push(validationErrorDictionary[fieldName]);
           }
-        }
       }
     } else {
       this.toaster.Error();

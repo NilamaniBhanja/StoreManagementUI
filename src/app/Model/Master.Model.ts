@@ -19,23 +19,24 @@ export class Measurement {
     public description: string;
 }
 export class Address {
-    public id: number;
-    public address1: string;
-    public address2: string;
-    public landMark: string;
-    public city: string;
-    public state: string;
-    public country: string;
-    public pinCode: string;
-    public mobileNo: string;
-    public landLine: string;
+    public id?: number;
+    public address1?: string;
+    public address2?: string;
+    public landMark?: string;
+    public city?: string;
+    public state?: string;
+    public country?: string;
+    public pinCode?: string;
+    public mobileNo?: string;
+    public landLine?: string;
+    public supplierId ?: number;
 }
 
-export class Store {
-    public id: number;
-    public name: string;
-    public storeType: string;
-    public businessType: string;
-    public addressId: string;
-    public address: Address;
+export class Supplier {
+    public id?: number;
+    public name?: string;
+    public supplierType?: string;
+    public businessType?: string;
+    public address?: Address;
+
 }

@@ -26,6 +26,7 @@ import { BrandComponent } from './Master/brand/brand.component';
 import { MeasurementComponent } from './Master/measurement/measurement.component';
 import { StoreComponent } from './Master/store/store.component';
 import { SupplierComponent } from './Master/supplier/supplier.component';
+import { CategoryComponent } from './Master/category/category.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SupplierComponent } from './Master/supplier/supplier.component';
     BrandComponent,
     MeasurementComponent,
     StoreComponent,
-    SupplierComponent
+    SupplierComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

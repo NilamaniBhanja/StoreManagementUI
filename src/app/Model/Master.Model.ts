@@ -38,5 +38,10 @@ export class Supplier {
     public supplierType?: string;
     public businessType?: string;
     public address?: Address;
+}
 
+export class Category {
+    public id: number;
+    public name: string;
+    public description: string;
 }

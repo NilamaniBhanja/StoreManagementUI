@@ -27,6 +27,7 @@ import { MeasurementComponent } from './Master/measurement/measurement.component
 import { StoreComponent } from './Master/store/store.component';
 import { SupplierComponent } from './Master/supplier/supplier.component';
 import { CategoryComponent } from './Master/category/category.component';
+import { ProductCostComponent } from './Master/product-cost/product-cost.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { CategoryComponent } from './Master/category/category.component';
     MeasurementComponent,
     StoreComponent,
     SupplierComponent,
-    CategoryComponent
+    CategoryComponent,
+    ProductCostComponent
   ],
   imports: [
     BrowserModule,

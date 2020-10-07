@@ -1,3 +1,4 @@
+import { ProductCostComponent } from './../../Master/product-cost/product-cost.component';
 import { CategoryComponent } from './../../Master/category/category.component';
 import { SupplierComponent } from './../../Master/supplier/supplier.component';
 import { Routes} from '@angular/router';
@@ -12,6 +13,7 @@ export const SECURE_ROUTES: Routes = [
     { path: 'Supplier', component: SupplierComponent, data: { title: 'Supplier Master' }},
     { path: 'Measurement', component: MeasurementComponent, data: { title: 'Measurement Master' }},
     { path: 'Category', component: CategoryComponent, data: { title: 'Category Master' }},
+    { path: 'ProductCost', component: ProductCostComponent, data: { title: 'Product Cost Master' }},
     { path: '', redirectTo: 'Dashboard', pathMatch: 'full', },
   { path: '**', component: DashboardComponent }
 ];

@@ -45,3 +45,12 @@ export class Category {
     public name: string;
     public description: string;
 }
+
+export class ProductCost {
+    public id: number;
+    public listPrice: any;
+    public price: any;
+    public price50: any;
+    public price100: any;
+    public effectiveDate: any;
+}
